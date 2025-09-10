@@ -1,0 +1,35 @@
+Bootstrap: docker
+From: spack/ubuntu-jammy:develop
+
+%post -c /bin/bash
+    CUSTOM_ENV=/.singularity.d/env/99-zz_custom_env.sh
+    cat >$CUSTOM_ENV <<EOF
+#!/bin/bash
+PS1="\[\e[1;92m\][Singularity]\[\e[m\] \u@\h:\w\$ "
+EOF
+    chmod 755 $CUSTOM_ENV
+
+%post
+	export DEBIAN_FRONTEND=noninteractive
+	apt-get -y update
+	apt-get -y install vi less emacs
+
+#spack env creation
+	. /opt/spack/share/spack/setup-env.sh 
+	spack env create spack-env
+	spack env activate spack-env
+	spack add openmpi && \
+	spack concretize  && \
+	spack install
+
+#entrypoint
+#
+#	{ \	 
+#		echo '#!/bin/sh' && \
+#		echo  '.' /opt/spack/share/spack/setup-env.sh && \ 		   echo spack env activate spack-env && \
+#		echo  'exec "$@"'; \
+#	} >/entrypoint.sh && \ 
+#	chmod a+x /entrypoint.sh && \ 
+
+%runscript
+	. /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && exec "$@" 
