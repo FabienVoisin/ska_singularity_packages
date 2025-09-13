@@ -18,7 +18,7 @@ EOF
 	. /opt/spack/share/spack/setup-env.sh 
 	spack env create spack-env
 	spack env activate spack-env
-	spack add openmpi && \
+	spack add ##MPI##@##MPIVERSION## && \
 	spack concretize  && \
 	spack install
 
