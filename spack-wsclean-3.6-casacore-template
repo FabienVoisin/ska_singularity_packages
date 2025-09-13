@@ -1,0 +1,20 @@
+Bootstrap : localimage
+From : toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.7.1_##MPI##_##MPIVERSION##.sif
+
+%post
+	. /opt/spack/share/spack/setup-env.sh
+	sed -i -r -e  "s|(.*\sPATH\:.*)|\1\:/opt/wsclean/bin|g" -e  "s|(.*LIBRARY_PATH\:.*)|\1\:/opt/wsclean/lib|g" -e  "s|(.*LD_LIBRARY_PATH\:.*)|\1\:/opt/wsclean/lib|g" /opt/spack/var/spack/environments/spack-env/spack.yaml
+ 
+	spack env activate spack-env 
+	. /opt/venv/bin/activate
+	git clone -b v3.6 https://gitlab.com/aroffringa/wsclean.git
+	cd wsclean
+	mkdir build
+	cd build
+	cmake ../ -DHDF5_INCLUDE_DIRS=/opt/spack/var/spack/environments/spack-env/.spack-env/view/include -DCASACORE_ROOT_DIR=/opt/casacore -DPython3_EXECUTABLE=/opt/venv/bin/python3 -DPython3_INCLUDE_DIR=/opt/spack/var/spack/environments/spack-env/.spack-env/view/include/python3.9 -DPython3_LIBRARY=/opt/spack/var/spack/environments/spack-env/.spack-env/view/lib/libpython3.9.so  -DCMAKE_INSTALL_PREFIX=/opt/wsclean
+
+	make && make install
+	
+ 
+%runscript
+	 . /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && . /opt/venv/bin/activate && exec "$@" 

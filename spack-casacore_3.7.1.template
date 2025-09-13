@@ -1,0 +1,51 @@
+Bootstrap: localimage
+From: toolchain_##MPI##_##MPIVERSION##/spack-##MPI##_##MPIVERSION##.sif
+
+%post
+	
+#spack env creation
+	apt install -y rsync
+	mkdir -p /opt/install/share/casadata
+	set -o noclobber \
+	&& (echo '  env_vars:' \
+    	&&  echo '    prepend_path:' \
+	&&  echo '      PATH: /opt/casacore/bin' \
+	&&  echo '      LIBRARY_PATH: /opt/casacore/lib' \
+	&&  echo '      LD_LIBRARY_PATH: /opt/casacore/lib') >> /opt/spack/var/spack/environments/spack-env/spack.yaml
+	cat /opt/spack/var/spack/environments/spack-env/spack.yaml
+	rsync -avz rsync://casa-rsync.nrao.edu/casa-data /opt/install/share/casadata	
+	. /opt/spack/share/spack/setup-env.sh  
+	spack env activate spack-env
+	spack add boost@1.73.0+chrono+date_time+filesystem+program_options+python+regex+system+test+thread cxxstd=11
+	spack add fftw 
+	spack add adios2+bzip2+mgard+mpi+python
+	spack add wcslib+cfitsio
+	spack add flex bison gsl
+	spack add hdf5+cxx+fortran+hl
+	spack add cmake
+	spack concretize
+	spack install
+
+	git clone -b v3.7.1 https://github.com/casacore/casacore.git
+	cd casacore
+	mkdir build
+	cd build
+	cmake ../ -DUSE_ADIOS2=ON -DUSE_MPI=ON -DUSE_HDF5=ON -DBUILD_PYTHON3=ON -DUSE_ADIOS2=ON -DUSE_MPI=ON -DUSE_HDF5=ON -DBUILD_PYTHON3=ON -DCMAKE_INSTALL_PREFIX=/opt/casacore -DDATA_DIR=/opt/install/share/casadata
+	make && make install
+	#python virtual env
+	mkdir /opt/venv
+	python -m venv /opt/venv	
+	. /opt/venv/bin/activate
+	cd
+	git clone -b v3.7.1 https://github.com/casacore/python-casacore.git
+	cd python-casacore
+	#need to set CASACORE_DATA
+	export CASACORE_DATA=/opt/install/share/casadata/
+	export CASACORE_ROOT_DIR=/opt/casacore
+	
+	#need to install ninja python
+	pip install ninja
+	export CMAKE_ARGS="-DCASACORE_DATA=${CASACORE_DATA} -DCASACORE_ROOT_DIR=${CASACORE_ROOT_DIR}"
+	pip install .
+%runscript
+	. /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && . /opt/venv/bin/activate && exec "$@" 
