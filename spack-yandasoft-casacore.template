@@ -1,0 +1,26 @@
+Bootstrap: localimage
+From:   toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.7.1_##MPI##_##MPIVERSION##.sif
+
+%post
+	apt install liblog4cxx-dev -y
+	. /opt/spack/share/spack/setup-env.sh
+	sed -i -r -e  "s|(.*\sPATH\:.*)|\1\:/opt/casarest/bin/:/opt/yandasoft/bin|g" -e  "s|(.*LIBRARY_PATH\:.*)|\1\:/opt/casarest/lib/:/opt/yandasoft/lib|g" -e  "s|(.*LD_LIBRARY_PATH\:.*)|\1\:/opt/casarest/lib:/opt/yandasoft/lib|g" /opt/spack/var/spack/environments/spack-env/spack.yaml
+
+	spack env activate spack-env
+	spack add cppunit
+	spack add xerces-c
+	spack install
+	. /opt/venv/bin/activate
+	git clone -b v1.9.2 https://github.com/casacore/casarest.git
+	mkdir casarest/build && cd casarest/build
+	cmake ../ -DCMAKE_INSTALL_PREFIX=/opt/casarest/ -DCASACORE_ROOT_DIR=/opt/casacore/
+	make && make install
+	cd ../../
+	git clone -b 1.17.5 https://bitbucket.csiro.au/scm/askapsdp/yandasoft.git
+	mkdir yandasoft/build && cd yandasoft/build
+	cmake ../  -DASKAPSDP_GIT_URL=https://bitbucket.csiro.au/scm/askapsdp/ -DCOMPONENTS_ROOT_DIR=/opt/casarest/ -DCMAKE_INSTALL_PREFIX=/opt/yandasoft/ -DCMAKE_VERBOSE_MAKEFILE=ON  -DCASACORE_ROOT_DIR=/opt/casacore
+	make && make install
+		
+%runscript
+	. /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && . /opt/venv/bin/activate && exec "$@"
+	
