@@ -1,0 +1,20 @@
+Bootstrap: localimage
+From: spack-casacore_3.7.1_openmpi_4.1.8.sif
+
+%post
+	. /opt/spack/share/spack/setup-env.sh  
+	spack env activate spack-env
+	. /opt/venv/bin/activate
+	cd
+	git clone -b v3.7.1 https://github.com/casacore/python-casacore.git
+	cd python-casacore
+	#need to set CASACORE_DATA
+	export CASACORE_DATA=/opt/install/share/casadata/
+	export CASACORE_ROOT_DIR=/opt/casacore
+	#need to install ninja python
+	pip install ninja
+	export CMAKE_ARGS="-DCASACORE_DATA=${CASACORE_DATA} -DCASACORE_ROOT_DIR=${CASACORE_ROOT_DIR}"
+	pip install . 
+
+%runscript
+	. /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && . /opt/venv/bin/activate && exec "$@" 
