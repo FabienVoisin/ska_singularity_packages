@@ -1,0 +1,85 @@
+--- askap-pipelinetasks.old/CMakeLists.txt	2025-09-28 14:58:14.566525054 +0000
++++ askap-pipelinetasks/CMakeLists.txt	2025-09-28 16:28:35.223168996 +0000
+@@ -159,7 +159,7 @@
+ FetchContent_MakeAvailable(lofar-common lofar-blob
+                            base-askap base-logfilters base-imagemath base-askapparallel base-scimath
+                            base-accessors base-components askap-analysis yandasoft 
+-                           askap-interfaces askap-sms
++                           
+ )
+ 
+ message (STATUS "Done - Fetching sub repos")
+@@ -222,7 +222,7 @@
+ # having regex listed in required components is causing problems with latest versions of cmake for some reason
+ # may be CMP0167 policy and changes around it have something to do with this change of behaviour. 
+ # This needs to be investigated at some point
+-find_package(Boost REQUIRED COMPONENTS system filesystem)
++find_package(Boost REQUIRED COMPONENTS regex system filesystem)
+ else()
+ message(STATUS "Assuming cmake version 3.29 or less")
+ find_package(Boost REQUIRED COMPONENTS regex system filesystem)
+@@ -253,17 +253,6 @@
+ 
+ add_library(pipelinetasks SHARED)
+ 
+-if ( APPLE )
+-    set(SMSCLIENT_LIB libaskap-smsclient.dylib)
+-    if ( USE_SMS )
+-        set (ICE_LIBRARIES ${ICE_LIB}/libIceDiscovery.dylib ${ICE_LIB}/libIce.dylib)
+-    endif()
+-else()
+-    set(SMSCLIENT_LIB libaskap-smsclient.so)
+-    if ( USE_SMS )
+-        set (ICE_LIBRARIES ${ICE_LIB}/libIceDiscovery.so ${ICE_LIB}/libIce.so)
+-    endif()
+-endif()
+ 
+ macro(add_sources_to_pipelinetasks)
+     foreach(arg IN ITEMS ${ARGN})
+@@ -288,7 +277,7 @@
+ 
+ add_subdirectory(askap/pipelinetasks/cflag)
+ add_subdirectory(askap/pipelinetasks/mssplit)
+-add_subdirectory(askap/pipelinetasks/cmodel)
++#add_subdirectory(askap/pipelinetasks/cmodel)
+ 
+ 
+ 
+@@ -304,13 +293,6 @@
+   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+   $<INSTALL_INTERFACE:include>
+ # skymodel include
+-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/askap-sms/skymodel/client-cpp/smsclient/ice-generated-cpp>
+-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/askap-sms/skymodel/client-cpp/smsclient>
+-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/askap-sms/skymodel/client-cpp>
+-  $<BUILD_INTERFACE:${FETCHCONTENT_SOURCE_DIR_ASKAP-SMS}/skymodel/client-cpp/smsclient/ice-generated-cpp>
+-  $<BUILD_INTERFACE:${FETCHCONTENT_SOURCE_DIR_ASKAP-SMS}/skymodel/client-cpp/smsclient>
+-  $<BUILD_INTERFACE:${FETCHCONTENT_SOURCE_DIR_ASKAP-SMS}/skymodel/client-cpp>
+-  $<INSTALL_INTERFACE:include/SkyModel>
+   ${Boost_INCLUDE_DIRS}
+   ${log4cxx_INCLUDE_DIRS}
+   ${CASACORE_INCLUDE_DIRS}
+@@ -318,14 +300,12 @@
+   ${ICE_INC}
+ )
+ 
+-add_dependencies(pipelinetasks libaskap-smsclient)
+ 
+ target_link_libraries(pipelinetasks PUBLIC
+ 		askap::askap
+ 		lofar::Common
+         askap::components
+         askap::accessors
+-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/_deps/askap-sms-build/skymodel/client-cpp/smsclient/${SMSCLIENT_LIB}>
+ 		${log4cxx_LIBRARY}
+ 		${CASACORE_LIBRARIES}
+         ${Boost_LIBRARIES}
+@@ -370,8 +350,6 @@
+   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests/cflag)
+   add_subdirectory(tests/cflag)
+ 
+-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests/cmodel)
+-  add_subdirectory(tests/cmodel)
+ 
+   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests/mssplit)
+   add_subdirectory(tests/mssplit)
