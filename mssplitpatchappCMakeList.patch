@@ -1,0 +1,29 @@
+--- askap-pipelinetasks.old/askap/pipelinetasks/apps/CMakeLists.txt	2025-09-28 14:58:14.566525054 +0000
++++ askap-pipelinetasks/askap/pipelinetasks/apps/CMakeLists.txt	2025-09-28 16:29:14.122922373 +0000
+@@ -1,7 +1,6 @@
+ set (_progs
+ cflag
+ mssplit
+-cmodel
+ )
+ 
+ if (OPENSSL_FOUND)
+@@ -31,18 +30,11 @@
+ endforeach(prog ${_progs})
+ 
+ # build tDataAccessors
+-add_executable(tDataAccessors tDataAccessors.cc)
+ target_include_directories(pipelinetasks PUBLIC
+   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+   $<INSTALL_INTERFACE:include>
+   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/askap/pipelinetasks>
+ # skymodel include
+-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/_build/askap-sms/skymodel/client-cpp/smsclient/ice-generated-cpp>
+-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/_build/askap-sms/skymodel/client-cpp/smsclient>
+-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/_build/askap-sms/skymodel/client-cpp>
+-  $<INSTALL_INTERFACE:include/SkyModel>
+ )
+ 
+-target_link_libraries(tDataAccessors  askap::pipelinetasks)
+ 
+-install (TARGETS tDataAccessors DESTINATION bin)
