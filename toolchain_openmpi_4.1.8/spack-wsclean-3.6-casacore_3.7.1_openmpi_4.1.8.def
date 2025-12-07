@@ -11,7 +11,7 @@ From : toolchain_openmpi_4.1.8/spack-casacore_3.7.1_openmpi_4.1.8.sif
 	cd wsclean
 	mkdir build
 	cd build
-	cmake ../ -DHDF5_INCLUDE_DIRS=/opt/spack/var/spack/environments/spack-env/.spack-env/view/include -DCASACORE_ROOT_DIR=/opt/casacore -DPython3_EXECUTABLE=/opt/venv/bin/python3 -DPython3_INCLUDE_DIR=/opt/spack/var/spack/environments/spack-env/.spack-env/view/include/python3.9 -DPython3_LIBRARY=/opt/spack/var/spack/environments/spack-env/.spack-env/view/lib/libpython3.9.so  -DCMAKE_INSTALL_PREFIX=/opt/wsclean
+	cmake ../ -DHDF5_INCLUDE_DIRS=/opt/spack/var/spack/environments/spack-env/.spack-env/view/include -DCASACORE_ROOT_DIR=/opt/casacore -DPython3_EXECUTABLE=/opt/venv/bin/python3 -DPython3_INCLUDE_DIR=/opt/spack/var/spack/environments/spack-env/.spack-env/view/include/python3.14 -DPython3_LIBRARY=/opt/spack/var/spack/environments/spack-env/.spack-env/view/lib/libpython3.14.so  -DCMAKE_INSTALL_PREFIX=/opt/wsclean
 
 	make && make install
 	

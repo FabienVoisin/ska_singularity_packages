@@ -1,0 +1,32 @@
+#This makefile is used to create singularity image that aims to be compatible with the Setonix supercomputer.
+SINGULARITY := $(shell which singularity)
+BUILD_DIR := pawsey
+
+all : $(BUILD_DIR) $(DEFINITIONFILES) $(BUILD_DIR)/spack-casacore-mpich_amd.sif $(BUILD_DIR)/spack-yandasoft-casacore-mpich_amd.sif $(BUILD_DIR)/spack-mssplit-casacore-mpich_amd.sif 
+
+.PHONY: all 
+DEFINITIONFILES := $(wildcard $(BUILD_DIR)/*.def)
+
+$(BUILD_DIR)/%.def : %.def $(BUILD_DIR) 
+	@if [ ! -f $@ ]; then \
+		cp $< $@ ; \
+	else \
+		echo "nothing to do";\
+	fi
+
+
+
+$(BUILD_DIR) :		
+	@if [ ! -d $(BUILD_DIR) ]; then \
+		mkdir $(BUILD_DIR); \
+	else \
+		echo "nothing to do";\
+	 fi
+$(BUILD_DIR)/spack-casacore-mpich_amd.sif:  $(BUILD_DIR)/spack-casacore_mpich.def
+	$(SINGULARITY) build $@ $(BUILD_DIR)/spack-casacore_mpich.def
+
+$(BUILD_DIR)/spack-yandasoft-casacore-mpich_amd.sif : $(BUILD_DIR)/spack-casacore-mpich_amd.sif $(BUILD_DIR)/spack-yandasoft-casacore_mpichamd.def
+	$(SINGULARITY) build $@ $(BUILD_DIR)/spack-yandasoft-casacore_mpichamd.def
+
+$(BUILD_DIR)/spack-mssplit-casacore-mpich_amd.sif: $(BUILD_DIR)/spack-casacore-mpich_amd.sif $(BUILD_DIR)/spack-mssplit-casacore_amd.def
+	$(SINGULARITY) build $@ $(BUILD_DIR)/spack-mssplit-casacore_amd.def
