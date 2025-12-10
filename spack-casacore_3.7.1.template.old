@@ -42,8 +42,10 @@ From: toolchain_##MPI##_##MPIVERSION##/spack-##MPI##_##MPIVERSION##.sif
 	#need to set CASACORE_DATA
 	export CASACORE_DATA=/opt/install/share/casadata/
 	export CASACORE_ROOT_DIR=/opt/casacore
+	
 	#need to install ninja python
 	pip install ninja
+	export CMAKE_ARGS="-DCASACORE_DATA=${CASACORE_DATA} -DCASACORE_ROOT_DIR=${CASACORE_ROOT_DIR}"
 	pip install .
 %runscript
 	. /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && . /opt/venv/bin/activate && exec "$@" 

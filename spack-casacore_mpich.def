@@ -1,9 +1,37 @@
-Bootstrap: localimage
-From: toolchain_openmpi_4.1.8/spack-openmpi_4.1.8.sif
+Bootstrap: docker
+From: quay.io/pawsey/mpich-lustre-base:3.4.3_ubuntu24.04_lustrerelease
+
+%post -c /bin/bash
+    CUSTOM_ENV=/.singularity.d/env/99-zz_custom_env.sh
+    cat >$CUSTOM_ENV <<EOF
+#!/bin/bash
+PS1="\[\e[1;92m\][Singularity]\[\e[m\] \u@\h:\w\$ "
+EOF
+    chmod 755 $CUSTOM_ENV
+
 
 %post
-	
+	export debian_frontend=noninteractive
+	apt-get -y update
+	apt-get -y install less emacs
+	git clone --depth=2 --branch=releases/v1.0 https://github.com/spack/spack.git /opt/spack
 #spack env creation
+	. /opt/spack/share/spack/setup-env.sh 
+	spack external find mpich
+	set -o noclobber \
+	&& (echo '  libfabric:' \
+	&&  echo '    externals:' \
+	&&  echo '    - spec: libfabric@1.22.0' \
+	&&  echo '      modules:' \
+	&&  echo '      - libfabric/1.22.0' \
+	&&  echo '      prefix: /opt/cray/libfabric/1.22.0' \
+	&&  echo '    buildable: false') >> ~/.spack/packages.yaml
+ 
+ 
+	spack env create spack-env
+	spack env activate spack-env
+	
+	#spack env creation
 	apt install -y rsync
 	mkdir -p /opt/install/share/casadata
 	set -o noclobber \
@@ -14,8 +42,7 @@ From: toolchain_openmpi_4.1.8/spack-openmpi_4.1.8.sif
 	&&  echo '      LD_LIBRARY_PATH: /opt/casacore/lib') >> /opt/spack/var/spack/environments/spack-env/spack.yaml
 	cat /opt/spack/var/spack/environments/spack-env/spack.yaml
 	rsync -avz rsync://casa-rsync.nrao.edu/casa-data /opt/install/share/casadata	
-	. /opt/spack/share/spack/setup-env.sh  
-	spack env activate spack-env
+	
 	spack add boost@1.73.0+chrono+date_time+filesystem+program_options+python+regex+system+test+thread cxxstd=11
 	spack add fftw 
 	spack add adios2+bzip2+mgard+mpi+python

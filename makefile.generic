@@ -1,0 +1,64 @@
+#This make file is used to create image that can run on platform where a specific version of OpenMPI is given
+
+SINGULARITY := $(shell which singularity)
+BUILD_DIR := toolchain_$(MPI)_$(MPIVERSION)
+
+all : $(BUILD_DIR) $(DEFINITIONFILES) $(BUILD_DIR)/spack-$(MPI)_$(MPIVERSION).sif $(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).sif $(BUILD_DIR)/spack-wsclean-3.6-casacore_3.7.1-$(MPI)_$(MPIVERSION).sif $(BUILD_DIR)/spack-yandasoft-casacore_3.7.1-$(MPI)_$(MPIVERSION).sif $(BUILD_DIR)/spack-mssplit-casacore_3.7.1-$(MPI)_$(MPIVERSION).sif
+
+.PHONY: all
+DEFINITIONFILES := $(wildcard $(BUILD_DIR)/*.def)
+
+$(BUILD_DIR) :		
+	@if [ ! -d $(BUILD_DIR) ]; then \
+		mkdir $(BUILD_DIR); \
+	else \
+		echo "nothing to do";\
+	 fi
+
+
+$(BUILD_DIR)/spack-$(MPI)_$(MPIVERSION).def:  spack-openmpi.template
+	@sed -e "s|\#\#MPI\#\#|$(MPI)|g" -e "s|\#\#MPIVERSION\#\#|$(MPIVERSION)|g"  spack-openmpi.template > $(BUILD_DIR)/spack-$(MPI)_$(MPIVERSION).def
+
+$(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).def :  spack-casacore_3.7.1.template
+	@sed -e "s|\#\#MPI\#\#|$(MPI)|g" -e "s|\#\#MPIVERSION\#\#|$(MPIVERSION)|g"  spack-casacore_3.7.1.template > $(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).def
+
+$(BUILD_DIR)/spack-wsclean-3.6-casacore_3.7.1_$(MPI)_$(MPIVERSION).def:  spack-wsclean-3.6-casacore.template
+	@sed -e "s|\#\#MPI\#\#|$(MPI)|g" -e "s|\#\#MPIVERSION\#\#|$(MPIVERSION)|g"  spack-wsclean-3.6-casacore.template > $(BUILD_DIR)/spack-wsclean-3.6-casacore_3.7.1_$(MPI)_$(MPIVERSION).def
+
+$(BUILD_DIR)/spack-yandasoft-casacore_3.7.1_$(MPI)_$(MPIVERSION).def:  spack-yandasoft-casacore.template
+	@sed -e "s|\#\#MPI\#\#|$(MPI)|g" -e "s|\#\#MPIVERSION\#\#|$(MPIVERSION)|g"  spack-yandasoft-casacore.template > $(BUILD_DIR)/spack-yandasoft-casacore_3.7.1_$(MPI)_$(MPIVERSION).def
+
+$(BUILD_DIR)/spack-mssplit-casacore_3.7.1_$(MPI)_$(MPIVERSION).def:  spack-mssplit-casacore.template
+	@sed -e "s|\#\#MPI\#\#|$(MPI)|g" -e "s|\#\#MPIVERSION\#\#|$(MPIVERSION)|g"  spack-mssplit-casacore.template > $(BUILD_DIR)/spack-mssplit-casacore_3.7.1_$(MPI)_$(MPIVERSION).def
+
+##### Now the singularity commands to run #####
+
+$(BUILD_DIR)/spack-$(MPI)_$(MPIVERSION).sif : $(BUILD_DIR)/spack-$(MPI)_$(MPIVERSION).def
+	$(SINGULARITY) build $@ $<
+
+$(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).sif :  $(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).def  $(BUILD_DIR)/spack-$(MPI)_$(MPIVERSION).sif
+	$(SINGULARITY) build $@ $<
+
+$(BUILD_DIR)/spack-wsclean-3.6-casacore_3.7.1-$(MPI)_$(MPIVERSION).sif: $(BUILD_DIR)/spack-wsclean-3.6-casacore_3.7.1_$(MPI)_$(MPIVERSION).def $(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).sif
+	$(SINGULARITY) build $@ $<
+
+
+$(BUILD_DIR)/spack-yandasoft-casacore_3.7.1-$(MPI)_$(MPIVERSION).sif: $(BUILD_DIR)/spack-yandasoft-casacore_3.7.1_$(MPI)_$(MPIVERSION).def $(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).sif
+	$(SINGULARITY) build $@ $<
+
+$(BUILD_DIR)/spack-mssplit-casacore_3.7.1-$(MPI)_$(MPIVERSION).sif: $(BUILD_DIR)/spack-mssplit-casacore_3.7.1_$(MPI)_$(MPIVERSION).def $(BUILD_DIR)/spack-casacore_3.7.1_$(MPI)_$(MPIVERSION).sif
+	$(SINGULARITY) build $@ $<
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
