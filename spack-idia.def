@@ -1,0 +1,86 @@
+Bootstrap: localimage
+From: casa-test_mpich.sif 
+
+%post -c /bin/bash
+    CUSTOM_ENV=/.singularity.d/env/99-zz_custom_env.sh
+    cat >$CUSTOM_ENV <<EOF
+#!/bin/bash
+PS1="\[\e[1;92m\][Singularity]\[\e[m\] \u@\h:\w\$ "
+EOF
+    chmod 755 $CUSTOM_ENV
+
+
+%post
+	export debian_frontend=noninteractive
+	apt-get -y update
+	apt-get -y install less emacs unzip
+	apt-get install fuse xvfb libgoogle-perftools-dev libarchive-dev -y  
+	. /opt/spack/share/spack/setup-env.sh
+	spack env activate spack-env
+	spack add perl ghostscript libxi libfuse  c-ares grpc qt
+	spack concretize
+	spack install  
+	. /opt/venv/bin/activate
+	# Update pip and install python packages
+	python -m pip install --upgrade cloudpickle holoviews datasha
+der bokeh pandas dask-ms[xarray] scipy==1.13.0 protobuf==3.20 scikit-
+image matplotlib katdal astroquery DateTime
+        python -m pip install --no-binary :all: python-casacore
+        python -m pip install pyvirtualdisplay
+	# Install Jupyter for IPykernel
+        python -m pip install jupyter ipykernel
+
+        # Install PyBDSF
+        #apt-get install -y libboost-python-dev libboost-numpy-dev pyt
+hon-setuptools qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+        python -m pip install --upgrade PyQt5==5.15.7
+        python -m pip install --upgrade astropy
+        python -m pip install bdsf[ishell]
+	# Install PYGDSM
+	python -m pip install healpy
+        python -m pip install h5py	
+	python -m pip install git+https://github.com/telegraphic/pygdsm
+sm
+	python -m pip install casadata==2025.9.22
+        python -m pip install casaconfig==1.5.0
+        python -m pip install casatools==6.7.3.21
+        python -m pip install casatasks==6.7.3.21
+        python -m pip install casaplotms==2.8.2
+        python -m pip install casaviewer==2.4.4
+        python -m pip install casashell==6.7.3.21
+        python -m pip install casaplotserver==2.0.3
+        python -m pip install casatestutils==6.7.3.21
+        python -m pip install casatablebrowser==0.0.40
+        python -m pip install casalogger==1.0.23
+        python -m pip install casafeather==0.0.27
+        python -m pip install casampi==0.5.9
+	
+	# Fix matplotlib issue
+        python -m pip uninstall matplotlib -y
+        python -m pip install matplotlib
+	cd /opt
+        git clone https://open-bitbucket.nrao.edu/scm/casa/casaaddons.git
+	# Install katbeam
+        python -m pip install git+https://github.com/ska-sa/katbeam
+	echo 'measures.directory: /opt/install/share/casadata/' > /opt/.casarc
+	groupadd -g 20381 slurm
+	useradd -m -c "Slurm Slug" -u 20381 -g slurm slurm
+	
+%runscript
+	. /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && . /opt/venv/bin/activate && python "$@"	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

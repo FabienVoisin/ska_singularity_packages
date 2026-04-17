@@ -30,3 +30,9 @@ $(BUILD_DIR)/spack-yandasoft-casacore-mpich_amd.sif : $(BUILD_DIR)/spack-casacor
 
 $(BUILD_DIR)/spack-mssplit-casacore-mpich_amd.sif: $(BUILD_DIR)/spack-casacore-mpich_amd.sif $(BUILD_DIR)/spack-mssplit-casacore_amd.def
 	$(SINGULARITY) build $@ $(BUILD_DIR)/spack-mssplit-casacore_amd.def
+
+$(BUILD_DIR)/casa-test_mpich.sif:  $(BUILD_DIR)/spack-casacore_numpy.def
+	$(SINGULARITY) build $@ $(BUILD_DIR)/spack-casacore_numpy.def
+
+$(BUILD_DIR)/idianext.sif: $(BUILD_DIR)/casa-test_mpich.sif $(BUILD_DIR)/spack-idia.def
+	$(SINGULARITY) build $@ $(BUILD_DIR)/spack-idia.def
