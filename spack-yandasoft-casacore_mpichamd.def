@@ -1,6 +1,13 @@
 Bootstrap: localimage
 From:   pawsey/spack-casacore-mpich_amd.sif
 
+%labels
+        APPLICATION_NAME  Ubuntu Pawset MPICH Lustre + casacore 3.7.1 + Yandasoft 1.17.5
+        OS_VERSION 24.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
+
 %post
 	apt install liblog4cxx-dev -y
 	. /opt/spack/share/spack/setup-env.sh

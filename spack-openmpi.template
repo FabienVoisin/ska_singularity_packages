@@ -1,6 +1,13 @@
 Bootstrap: docker
 From: spack/ubuntu-jammy:develop
 
+%labels
+        APPLICATION_NAME  Ubuntu-Jammy OpenMPI
+        OS_VERSION 22.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
+
 %post -c /bin/bash
     CUSTOM_ENV=/.singularity.d/env/99-zz_custom_env.sh
     cat >$CUSTOM_ENV <<EOF

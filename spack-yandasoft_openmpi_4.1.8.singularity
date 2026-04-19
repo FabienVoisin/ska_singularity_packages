@@ -1,6 +1,13 @@
 Bootstrap: localimage
 From:   spack-casacore_3.7.1_openmpi_4.1.8.sif
 
+%labels
+        APPLICATION_NAME  Ubuntu-Jammy OpenMPI + casacore 3.7.1 + yandasoft 1.17.5
+        OS_VERSION 22.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
+
 %post
 	. /opt/spack/share/spack/setup-env.sh
 	sed -i -r -e  "s|(.*\sPATH\:.*)|\1\:/opt/casarest/bin/:/opt/yandasoft/bin|g" -e  "s|(.*LIBRARY_PATH\:.*)|\1\:/opt/casarest/lib/:/opt/yandasoft/lib|g" -e  "s|(.*LD_LIBRARY_PATH\:.*)|\1\:/opt/casarest/lib:/opt/yandasoft/lib|g" /opt/spack/var/spack/environments/spack-env/spack.yaml

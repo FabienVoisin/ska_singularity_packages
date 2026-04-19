@@ -1,6 +1,12 @@
 Bootstrap: docker
 From: quay.io/pawsey/mpich-lustre-base:3.4.3_ubuntu24.04_lustrerelease
 
+%labels
+        APPLICATION_NAME Pawsey Ubuntu mpich + casacore 3.7.1
+        OS_VERSION 24.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
 %post -c /bin/bash
     CUSTOM_ENV=/.singularity.d/env/99-zz_custom_env.sh
     cat >$CUSTOM_ENV <<EOF

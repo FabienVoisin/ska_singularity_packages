@@ -1,6 +1,13 @@
 Bootstrap: localimage
 From: casa-test_mpich.sif 
 
+%labels
+        APPLICATION_NAME  Ubuntu 24.04 Pawsey MPICH + CASACORE 3.7.1 + MeetKAT pipelines
+        OS_VERSION 24.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
+
 %post -c /bin/bash
     CUSTOM_ENV=/.singularity.d/env/99-zz_custom_env.sh
     cat >$CUSTOM_ENV <<EOF

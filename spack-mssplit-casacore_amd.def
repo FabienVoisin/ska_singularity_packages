@@ -1,6 +1,12 @@
 Bootstrap: localimage
 From:   pawsey/spack-casacore-mpich_amd.sif
 
+%labels
+	APPLICATION_NAME Pawsey Ubuntu mpich + ASKAP pipelinetasks
+        OS_VERSION 24.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
 %files 
 	./mssplitpatchappCMakeList.patch  
 	./mssplitpatchappmainCMakeList.patch
