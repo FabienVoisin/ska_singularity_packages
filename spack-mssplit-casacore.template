@@ -1,6 +1,13 @@
 Bootstrap: localimage
 From:   toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.7.1_##MPI##_##MPIVERSION##.sif
 
+%labels
+        APPLICATION_NAME  Ubuntu-Jammy OpenMPI + casacore 3.7.1 +ASKAP pipelines mssplit
+        OS_VERSION 22.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
+
 %files 
 	./mssplitpatchappCMakeList.patch  
 	./mssplitpatchappmainCMakeList.patch

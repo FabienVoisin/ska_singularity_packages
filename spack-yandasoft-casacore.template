@@ -1,6 +1,13 @@
 Bootstrap: localimage
 From:   toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.7.1_##MPI##_##MPIVERSION##.sif
 
+%labels
+        APPLICATION_NAME  Ubuntu Pawsey MPICH + casacore 3.7.1 + yandasoft 1.17.5
+        OS_VERSION 22.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
+
 %post
 	apt install liblog4cxx-dev -y
 	. /opt/spack/share/spack/setup-env.sh

@@ -1,6 +1,13 @@
 Bootstrap: docker
 From: quay.io/pawsey/mpich-lustre-base:3.4.3_ubuntu24.04_lustrerelease
 
+%labels
+        APPLICATION_NAME  Pawsey Lustre Ubuntu 24.04 + casacore 3.7.1
+        OS_VERSION 24.04
+        AUTHOR_NAME FABIEN VOISIN
+        AUTHOR_EMAIL fabien.voisin@adelaide.edu.au
+
+
 %post -c /bin/bash
     CUSTOM_ENV=/.singularity.d/env/99-zz_custom_env.sh
     cat >$CUSTOM_ENV <<EOF
@@ -43,8 +50,9 @@ EOF
 	cat /opt/spack/var/spack/environments/spack-env/spack.yaml
 	rsync -avz rsync://casa-rsync.nrao.edu/casa-data /opt/install/share/casadata	
 	
-	spack add boost@1.73.0+chrono+date_time+filesystem+program_options+python+regex+system+test+thread cxxstd=11
-	spack add fftw 
+	spack add boost+chrono+date_time+filesystem+program_options+python+regex+system+test+thread+numpy
+	spack add fftw
+	spack add ncurses@6.2 
 	spack add adios2+bzip2+mgard+mpi+python
 	spack add wcslib+cfitsio
 	spack add flex bison gsl
