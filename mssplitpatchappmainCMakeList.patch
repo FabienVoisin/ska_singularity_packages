@@ -1,10 +1,29 @@
---- askap-pipelinetasks.old/CMakeLists.txt	2025-09-28 14:58:14.566525054 +0000
-+++ askap-pipelinetasks/CMakeLists.txt	2025-09-28 16:28:35.223168996 +0000
-@@ -159,7 +159,7 @@
+--- askap-pipelinetasks.orig/CMakeLists.txt	2026-06-25 03:37:19.977124493 +0000
++++ askap-pipelinetasks/CMakeLists.txt	2026-06-25 02:59:12.906976221 +0000
+@@ -115,11 +115,11 @@
+ )
+ 
+ # -------- askap-analysis --------
+-FetchContent_Declare(askap-analysis
+-  GIT_REPOSITORY    ${ASKAPSDP_GIT_URL}/askap-analysis.git
+-  GIT_TAG           ${ASKAP_ANALYSIS_TAG}
+-  SOURCE_DIR        askap-analysis
+-)
++#FetchContent_Declare(askap-analysis
++#  GIT_REPOSITORY    ${ASKAPSDP_GIT_URL}/askap-analysis.git
++#  GIT_TAG           ${ASKAP_ANALYSIS_TAG}
++#  SOURCE_DIR        askap-analysis
++#)
+ 
+ # -------- yandasoft --------
+ FetchContent_Declare(yandasoft
+@@ -158,8 +158,8 @@
+ message (STATUS "Fetching sub repos")
  FetchContent_MakeAvailable(lofar-common lofar-blob
                             base-askap base-logfilters base-imagemath base-askapparallel base-scimath
-                            base-accessors base-components askap-analysis yandasoft 
+-                           base-accessors base-components askap-analysis yandasoft 
 -                           askap-interfaces askap-sms
++                           base-accessors base-components yandasoft 
 +                           
  )
  

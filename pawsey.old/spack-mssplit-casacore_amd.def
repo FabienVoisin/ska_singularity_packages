@@ -19,11 +19,11 @@ From:   pawsey/spack-casacore-mpich_amd.sif
 	cmake ../ -DCMAKE_INSTALL_PREFIX=/opt/casarest/ -DCASACORE_ROOT_DIR=/opt/casacore/
 	make && make install
 	cd ../../
-	git clone -b 1.19.1 https://gitlab.com/ASKAPSDP/askap-pipelinetasks.git
+	git clone -b 1.19.1 https://bitbucket.csiro.au/scm/askapsdp/askap-pipelinetasks.git
 	patch -p0 < mssplitpatchappCMakeList.patch
 	patch -p0 < mssplitpatchappmainCMakeList.patch 	
 	mkdir askap-pipelinetasks/build && cd askap-pipelinetasks/build
-	cmake ../  -DASKAPSDP_GIT_URL=https://gitlab.com/ASKAPSDP/ -DCOMPONENTS_ROOT_DIR=/opt/casarest/ -DCMAKE_INSTALL_PREFIX=/opt/pipelines/ -DCMAKE_VERBOSE_MAKEFILE=ON  -DCASACORE_ROOT_DIR=/opt/casacore	
+	cmake ../  -DASKAPSDP_GIT_URL=https://bitbucket.csiro.au/scm/askapsdp/ -DCOMPONENTS_ROOT_DIR=/opt/casarest/ -DCMAKE_INSTALL_PREFIX=/opt/pipelines/ -DCMAKE_VERBOSE_MAKEFILE=ON  -DCASACORE_ROOT_DIR=/opt/casacore	
 	make && make install
 		
 %runscript

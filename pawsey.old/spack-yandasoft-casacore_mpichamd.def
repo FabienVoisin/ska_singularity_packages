@@ -1,5 +1,5 @@
 Bootstrap: localimage
-From:   toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.7.1_##MPI##_##MPIVERSION##.sif
+From:   pawsey/spack-casacore-mpich_amd.sif
 
 %post
 	apt install liblog4cxx-dev -y
@@ -16,9 +16,9 @@ From:   toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.7.1_##MPI##_##MPIVERSI
 	cmake ../ -DCMAKE_INSTALL_PREFIX=/opt/casarest/ -DCASACORE_ROOT_DIR=/opt/casacore/
 	make && make install
 	cd ../../
-	git clone -b 1.17.5 https://gitlab.com/ASKAPSDP/yandasoft.git
+	git clone -b 1.17.5 https://bitbucket.csiro.au/scm/askapsdp/yandasoft.git
 	mkdir yandasoft/build && cd yandasoft/build
-	cmake ../  -DASKAPSDP_GIT_URL=https://gitlab.com/ASKAPSDP/ -DCOMPONENTS_ROOT_DIR=/opt/casarest/ -DCMAKE_INSTALL_PREFIX=/opt/yandasoft/ -DCMAKE_VERBOSE_MAKEFILE=ON  -DCASACORE_ROOT_DIR=/opt/casacore
+	cmake ../  -DASKAPSDP_GIT_URL=https://bitbucket.csiro.au/scm/askapsdp/ -DCOMPONENTS_ROOT_DIR=/opt/casarest/ -DCMAKE_INSTALL_PREFIX=/opt/yandasoft/ -DCMAKE_VERBOSE_MAKEFILE=ON  -DCASACORE_ROOT_DIR=/opt/casacore
 	make && make install
 		
 %runscript

@@ -26,7 +26,7 @@ From: toolchain_openmpi_4.1.8/spack-openmpi_4.1.8.sif
 	spack concretize
 	spack install
 
-	git clone -b v3.7.1 https://github.com/casacore/casacore.git
+	git clone -b adios2stman-rows-readwrite https://github.com/FabienVoisin/casacore.git
 	cd casacore
 	mkdir build
 	cd build
