@@ -26,7 +26,7 @@ From: toolchain_##MPI##_##MPIVERSION##/spack-##MPI##_##MPIVERSION##.sif
 	spack concretize
 	spack install
 
-	git clone -b v3.7.1 https://github.com/casacore/casacore.git
+	git clone -b v3.8.1 https://github.com/casacore/casacore.git
 	cd casacore
 	mkdir build
 	cd build
@@ -37,7 +37,7 @@ From: toolchain_##MPI##_##MPIVERSION##/spack-##MPI##_##MPIVERSION##.sif
 	python -m venv /opt/venv	
 	. /opt/venv/bin/activate
 	cd
-	git clone -b v3.7.1 https://github.com/casacore/python-casacore.git
+	git clone -b v3.8.1 https://github.com/casacore/python-casacore.git
 	cd python-casacore
 	#need to set CASACORE_DATA
 	export CASACORE_DATA=/opt/install/share/casadata/

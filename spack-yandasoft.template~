@@ -1,5 +1,5 @@
 Bootstrap: localimage
-From:   spack-casacore_3.7.1_openmpi_4.1.8.sif
+From:   spack-casacore_3.8.1_openmpi_4.1.8.sif
 
 %post
 	apt install liblog4cxx-dev -y

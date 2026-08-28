@@ -40,20 +40,23 @@ EOF
 	&&  echo '      PATH: /opt/casacore/bin' \
 	&&  echo '      LIBRARY_PATH: /opt/casacore/lib' \
 	&&  echo '      LD_LIBRARY_PATH: /opt/casacore/lib') >> /opt/spack/var/spack/environments/spack-env/spack.yaml
+	sed -r -i  $'21a \ \ \ \ version("1.25", sha256="d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d")'  ~/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/libdeflate/package.py 
 	cat /opt/spack/var/spack/environments/spack-env/spack.yaml
 	rsync -avz rsync://casa-rsync.nrao.edu/casa-data /opt/install/share/casadata	
 	
-	spack add boost@1.73.0+chrono+date_time+filesystem+program_options+python+regex+system+test+thread cxxstd=11
-	spack add fftw 
+	spack add boost@1.88.0+chrono+date_time+filesystem+program_options+python+regex+system+test+thread cxxstd=11
+	spack add fftw
+	spack add python@3.10 
 	spack add adios2+bzip2+mgard+mpi+python
 	spack add wcslib+cfitsio
 	spack add flex bison gsl
 	spack add hdf5+cxx+fortran+hl
 	spack add cmake
+	spack add libdeflate
 	spack concretize
 	spack install
 
-	git clone -b adios2stman-rows-readwrite https://github.com/FabienVoisin/casacore.git
+	git clone -b v3.8.1 https://github.com/casacore/casacore.git 
 	cd casacore
 	mkdir build
 	cd build
@@ -63,17 +66,17 @@ EOF
 	mkdir /opt/venv
 	python -m venv /opt/venv	
 	. /opt/venv/bin/activate
-	cd
-	git clone -b v3.7.1 https://github.com/casacore/python-casacore.git
-	cd python-casacore
-	#need to set CASACORE_DATA
-	export CASACORE_DATA=/opt/install/share/casadata/
-	export CASACORE_ROOT_DIR=/opt/casacore
+	#cd
+	#git clone -b v3.8.1 https://github.com/casacore/python-casacore.git
+	#cd python-casacore
+	##need to set CASACORE_DATA
+	#export CASACORE_DATA=/opt/install/share/casadata/
+	#export CASACORE_ROOT_DIR=/opt/casacore
 	
 	#need to install ninja python
-	pip install ninja
-	export CMAKE_ARGS="-DCASACORE_DATA=${CASACORE_DATA} -DCASACORE_ROOT_DIR=${CASACORE_ROOT_DIR}"
-	pip install .
+	#pip install ninja
+	#export CMAKE_ARGS="-DCASACORE_DATA=${CASACORE_DATA} -DCASACORE_ROOT_DIR=${CASACORE_ROOT_DIR}"
+	#pip install .
 	
 %runscript
 	. /opt/spack/share/spack/setup-env.sh && spack env activate spack-env && . /opt/venv/bin/activate && exec "$@" 

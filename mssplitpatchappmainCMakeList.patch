@@ -1,7 +1,21 @@
---- askap-pipelinetasks.orig/CMakeLists.txt	2026-06-25 03:37:19.977124493 +0000
-+++ askap-pipelinetasks/CMakeLists.txt	2026-06-25 02:59:12.906976221 +0000
-@@ -115,11 +115,11 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6aede54..b931559 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -107,25 +107,25 @@ FetchContent_Declare(base-accessors
  )
+ 
+ # -------- base-components --------
+-FetchContent_Declare(base-components
+-  GIT_REPOSITORY    ${ASKAPSDP_GIT_URL}/base-components.git
+-  GIT_TAG           ${BASE_COMPONENTS_TAG}
+-  SOURCE_DIR        base-components
+-)
++#FetchContent_Declare(base-components
++#  GIT_REPOSITORY    ${ASKAPSDP_GIT_URL}/base-components.git
++#  GIT_TAG           ${BASE_COMPONENTS_TAG}
++#  SOURCE_DIR        base-components
++#)
  
  # -------- askap-analysis --------
 -FetchContent_Declare(askap-analysis
@@ -16,28 +30,49 @@
 +#)
  
  # -------- yandasoft --------
- FetchContent_Declare(yandasoft
-@@ -158,8 +158,8 @@
+-FetchContent_Declare(yandasoft
+-  GIT_REPOSITORY    ${ASKAPSDP_GIT_URL}/yandasoft.git
+-  GIT_TAG           ${ASKAP_YANDASOFT_TAG}
+-  SOURCE_DIR        yandasoft
+-)
++#FetchContent_Declare(yandasoft
++#  GIT_REPOSITORY    ${ASKAPSDP_GIT_URL}/yandasoft.git
++#  GIT_TAG           ${ASKAP_YANDASOFT_TAG}
++#  SOURCE_DIR        yandasoft
++#)
+ 
+ # -------- askap-interfaces --------
+ FetchContent_Declare(askap-interfaces
+@@ -157,8 +157,8 @@ message(STATUS "askap-cmake path is ${askap-cmake_SOURCE_DIR}")
  message (STATUS "Fetching sub repos")
  FetchContent_MakeAvailable(lofar-common lofar-blob
                             base-askap base-logfilters base-imagemath base-askapparallel base-scimath
 -                           base-accessors base-components askap-analysis yandasoft 
 -                           askap-interfaces askap-sms
-+                           base-accessors base-components yandasoft 
++                           base-accessors 
 +                           
  )
  
  message (STATUS "Done - Fetching sub repos")
-@@ -222,7 +222,7 @@
+@@ -221,7 +221,7 @@ message(STATUS "Assuming cmake version 3.30 or greater")
  # having regex listed in required components is causing problems with latest versions of cmake for some reason
  # may be CMP0167 policy and changes around it have something to do with this change of behaviour. 
  # This needs to be investigated at some point
--find_package(Boost REQUIRED COMPONENTS system filesystem)
-+find_package(Boost REQUIRED COMPONENTS regex system filesystem)
+-find_package(Boost REQUIRED COMPONENTS filesystem)
++find_package(Boost REQUIRED COMPONENTS regex filesystem)
  else()
  message(STATUS "Assuming cmake version 3.29 or less")
  find_package(Boost REQUIRED COMPONENTS regex system filesystem)
-@@ -253,17 +253,6 @@
+@@ -241,7 +241,7 @@ include_directories( ${CMAKE_SOURCE_DIR} )
+ include_directories (${Boost_INCLUDE_DIRS})
+ include_directories(${log4cxx_INCLUDE_DIRS})
+ include_directories(${CASACORE_INCLUDE_DIRS})
+-include_directories(${COMPONENTS_INCLUDE_DIRS})
++#include_directories(${COMPONENTS_INCLUDE_DIRS})
+ include_directories(${MPI_INCLUDE_PATH})
+ include_directories(${XercesC_INCLUDE_DIRS})
+ 
+@@ -252,17 +252,6 @@ endif()
  
  add_library(pipelinetasks SHARED)
  
@@ -55,7 +90,7 @@
  
  macro(add_sources_to_pipelinetasks)
      foreach(arg IN ITEMS ${ARGN})
-@@ -288,7 +277,7 @@
+@@ -287,7 +276,7 @@ set_target_properties(pipelinetasks PROPERTIES
  
  add_subdirectory(askap/pipelinetasks/cflag)
  add_subdirectory(askap/pipelinetasks/mssplit)
@@ -64,7 +99,7 @@
  
  
  
-@@ -304,13 +293,6 @@
+@@ -303,13 +292,6 @@ target_include_directories(pipelinetasks PUBLIC
    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
    $<INSTALL_INTERFACE:include>
  # skymodel include
@@ -78,7 +113,7 @@
    ${Boost_INCLUDE_DIRS}
    ${log4cxx_INCLUDE_DIRS}
    ${CASACORE_INCLUDE_DIRS}
-@@ -318,14 +300,12 @@
+@@ -317,14 +299,11 @@ target_include_directories(pipelinetasks PUBLIC
    ${ICE_INC}
  )
  
@@ -87,15 +122,20 @@
  target_link_libraries(pipelinetasks PUBLIC
  		askap::askap
  		lofar::Common
-         askap::components
+-        askap::components
          askap::accessors
 -        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/_deps/askap-sms-build/skymodel/client-cpp/smsclient/${SMSCLIENT_LIB}>
  		${log4cxx_LIBRARY}
  		${CASACORE_LIBRARIES}
          ${Boost_LIBRARIES}
-@@ -370,8 +350,6 @@
-   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests/cflag)
-   add_subdirectory(tests/cflag)
+@@ -366,11 +345,9 @@ if (CPPUNIT_FOUND)
+   include(CTest)
+   enable_testing()
+ 
+-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests/cflag)
+-  add_subdirectory(tests/cflag)
++  #include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests/cflag)
++  #add_subdirectory(tests/cflag)
  
 -  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tests/cmodel)
 -  add_subdirectory(tests/cmodel)

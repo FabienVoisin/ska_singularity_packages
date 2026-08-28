@@ -1,14 +1,16 @@
---- askap-pipelinetasks.old/askap/pipelinetasks/apps/CMakeLists.txt	2025-09-28 14:58:14.566525054 +0000
-+++ askap-pipelinetasks/askap/pipelinetasks/apps/CMakeLists.txt	2025-09-28 16:29:14.122922373 +0000
-@@ -1,7 +1,6 @@
+diff --git a/askap/pipelinetasks/apps/CMakeLists.txt b/askap/pipelinetasks/apps/CMakeLists.txt
+index c247dde..7f9783e 100644
+--- a/askap/pipelinetasks/apps/CMakeLists.txt
++++ b/askap/pipelinetasks/apps/CMakeLists.txt
+@@ -1,7 +1,5 @@
  set (_progs
- cflag
+-cflag
  mssplit
 -cmodel
  )
  
  if (OPENSSL_FOUND)
-@@ -31,18 +30,11 @@
+@@ -31,18 +29,11 @@ foreach (prog ${_progs})
  endforeach(prog ${_progs})
  
  # build tDataAccessors

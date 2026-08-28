@@ -1,5 +1,5 @@
 Bootstrap: localimage
-From:   toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.7.1_##MPI##_##MPIVERSION##.sif
+From:   toolchain_##MPI##_##MPIVERSION##/spack-casacore_3.8.1_##MPI##_##MPIVERSION##.sif
 
 %post
 	apt install liblog4cxx-dev -y
